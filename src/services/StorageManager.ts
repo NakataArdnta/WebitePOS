@@ -126,6 +126,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   darkMode: false,
   autoSave: true,
   currencySymbol: 'Rp',
+  qrisImageUrl: 'https://i.ibb.co.com/rGNm2pcL/qr-ID1024366407566-02-08-25-175412960-1754129607749.jpg',
 };
 
 export class StorageManager {

@@ -853,6 +853,7 @@ export const PosKasirView: React.FC<PosKasirViewProps> = ({
         orderId={qrisOrderId}
         itemName={`[POSMAIN] ${cart.length} item - ${customerName || 'Pelanggan Kasir'}`}
         customerName={customerName || settings.storeOwner}
+        qrisImageUrl={settings.qrisImageUrl}
         onClose={() => setShowQrisModal(false)}
         onSuccess={() => {
           setShowQrisModal(false);

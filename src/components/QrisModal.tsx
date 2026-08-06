@@ -9,6 +9,7 @@ interface QrisModalProps {
   orderId: string;
   itemName: string;
   customerName?: string;
+  qrisImageUrl?: string;
   onClose: () => void;
   onSuccess: () => void;
 }
@@ -19,6 +20,7 @@ export const QrisModal: React.FC<QrisModalProps> = ({
   orderId,
   itemName,
   customerName,
+  qrisImageUrl,
   onClose,
   onSuccess,
 }) => {
@@ -34,13 +36,13 @@ export const QrisModal: React.FC<QrisModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Standardized EMVCo QRIS payload format
-  const padAmount = String(Math.round(amount)).padStart(6, '0');
-  const qrisPayload = `00020101021226680016ID.CO.QRIS.POS0118936009140000000000020300303UMI51440014ID.LINKAJA.WWW0215ID102003847291252045812530336054${padAmount.length}${padAmount}5802ID5912WARUNG POS PPOB6007JAKARTA61051234562070703A016304C91E`;
-  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrisPayload)}`;
+  // Custom or default image URL for QRIS
+  const displayQrUrl =
+    qrisImageUrl ||
+    'https://i.ibb.co.com/rGNm2pcL/qr-ID1024366407566-02-08-25-175412960-1754129607749.jpg';
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(qrisPayload);
+    navigator.clipboard.writeText(displayQrUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -101,10 +103,10 @@ export const QrisModal: React.FC<QrisModalProps> = ({
             <div className="flex flex-col items-center justify-center space-y-3">
               <div className="p-4 bg-white rounded-2xl border-2 border-rose-200 shadow-md relative group">
                 <img
-                  src={qrImageUrl}
+                  src={displayQrUrl}
                   alt="QRIS Code"
                   referrerPolicy="no-referrer"
-                  className="w-48 h-48 object-contain rounded-lg"
+                  className="w-56 h-56 object-contain rounded-lg"
                 />
                 <div className="absolute inset-x-0 bottom-1 flex justify-center">
                   <span className="px-2 py-0.5 bg-rose-600 text-white text-[9px] font-black rounded-md tracking-widest shadow">

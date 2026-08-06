@@ -83,6 +83,10 @@ export interface AppSettings {
   darkMode: boolean;
   autoSave: boolean;
   currencySymbol: string;
+  qrisImageUrl?: string;
+  digiflazzUsername?: string;
+  digiflazzApiKey?: string;
+  digiflazzIsProduction?: boolean;
 }
 
 export interface UndoAction {
