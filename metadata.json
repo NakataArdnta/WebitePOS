@@ -1,0 +1,6 @@
+{
+  "name": "POS & PPOB Store System",
+  "description": "Sistem Point of Sale (Kasir Warung/Toko), transaksi PPOB (Pulsa, PLN, Game, E-Wallet), Stok Opname, Laci Kas, dan Laporan Rekap Harian.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
