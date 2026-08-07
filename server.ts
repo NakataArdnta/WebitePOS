@@ -22,7 +22,7 @@ app.use(express.json({ limit: "50mb" }));
 // 1. KONEKSI MONGODB ATLAS
 // ==========================================
 // Buat database di MongoDB Atlas (gratis), lalu masukkan URI-nya ke Environment Variable Vercel (MAMPUKAN MONGODB_URI)
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://nakatatardinata_db_user:2szheVYocn2cbtaT@cluster0.ghs2ijr.mongodb.net/?appName=Cluster0";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://nakatatardinata_db_user:2szheVYocn2cbtaT@cluster0.ghs2ijr.mongodb.net/revina_print?retryWrites=true&w=majority&appName=Cluster0";
 
 mongoose.connect(MONGODB_URI)
   .then(() => console.log("✅ Berhasil terhubung ke MongoDB Atlas"))
