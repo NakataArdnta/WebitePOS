@@ -202,41 +202,82 @@ app.post("/api/auth/register", async (req, res) => {
 // ==========================================
 app.post("/api/auth/login", async (req, res) => {
   try {
-    const { inputAccount, password } = req.body;
+    let { inputAccount, password } = req.body;
 
     if (!inputAccount || !password) {
-      return res.status(400).json({ error: "Harap masukkan identitas akun dan password" });
-    }
-
-    // Logika Admin
-    const validAdmins = ["admin", "revina"];
-    if (validAdmins.includes(inputAccount)) {
-      if (password !== "admin") {
-        return res.status(401).json({ error: "Password admin salah" });
-      }
-      return res.json({
-        token: "jwt-admin-token-" + Date.now(),
-        user: { id: "admin-" + inputAccount, username: inputAccount, name: "Admin " + inputAccount, role: "SUPER_ADMIN" },
+      return res.status(400).json({
+        error: "Harap masukkan identitas akun dan password",
       });
     }
 
-    // Logika Customer (Cek ke MongoDB berdasarkan username atau email)
-    const user = await UserModel.findOne({ $or: [{ username: inputAccount }, { email: inputAccount }] });
+    // Normalisasi input
+    inputAccount = String(inputAccount).trim().toLowerCase();
+    password = String(password).trim();
+
+    // ==========================
+    // LOGIN ADMIN
+    // ==========================
+    const validAdmins = ["admin", "revina"];
+
+    if (validAdmins.includes(inputAccount)) {
+      if (password !== "admin") {
+        return res.status(401).json({
+          error: "Password admin salah",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        token: "jwt-admin-token-" + Date.now(),
+        user: {
+          id: "admin-" + inputAccount,
+          username: inputAccount,
+          name: "Admin " + inputAccount,
+          email: inputAccount + "@revina.local",
+          role: "SUPER_ADMIN",
+        },
+      });
+    }
+
+    // ==========================
+    // LOGIN CUSTOMER
+    // ==========================
+    const user = await UserModel.findOne({
+      $or: [
+        { username: inputAccount },
+        { email: inputAccount },
+      ],
+    });
 
     if (!user) {
-      return res.status(401).json({ error: "Akun tidak ditemukan. Silakan daftar terlebih dahulu." });
+      return res.status(401).json({
+        error: "Akun tidak ditemukan.",
+      });
     }
 
     if (user.password !== password) {
-      return res.status(401).json({ error: "Password salah." });
+      return res.status(401).json({
+        error: "Password salah.",
+      });
     }
 
-    return res.json({
+    return res.status(200).json({
+      success: true,
       token: "jwt-customer-token-" + Date.now(),
-      user: { id: user.id, username: user.username, name: user.name, role: user.role },
+      user: {
+        id: user.id,
+        username: user.username,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
   } catch (err) {
-    res.status(500).json({ error: "Terjadi kesalahan pada server saat login" });
+    console.error("LOGIN ERROR :", err);
+
+    return res.status(500).json({
+      error: "Terjadi kesalahan pada server saat login",
+    });
   }
 });
 
